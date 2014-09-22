@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HoneyComb" default="do-all">
+    <path id="packJar.classpath">
+        <fileset dir="libs">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="do-all" depends="compile-java, create-jar"/>
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="init" depends="clean">
+        <mkdir dir="build/classes"/>
+    </target>
+
+    <target name="compile-java" depends="init">
+       <javac srcdir="src" destdir="build/classes" includes="**" source="1.6" deprecation="true" debug="true" encoding="utf-8" > 
+            <classpath refid="packJar.classpath"/>
+        </javac>
+    </target>
+    
+    <target name="copy-properties" depends="init">
+		<copy file="src/log4j.properties" todir="build/classes" overwrite="true"/>
+    	<copy file="src/readme.txt" todir="build/classes" overwrite="true"/>
+    	<copy todir="build/classes/mapper">
+    			<fileset dir="src/mapper">
+    				<include name="*.*" />
+    			</fileset>
+    		</copy>
+    </target>
+	<target name="tstamp">
+		<tstamp/>
+	</target>
+    <target name="create-jar" depends="copy-properties,tstamp">
+        <jar jarfile="AlarmRecv.jar">
+          <fileset dir="build/classes" includes="**/*.*"/>
+        </jar>
+    </target>
+</project>
+

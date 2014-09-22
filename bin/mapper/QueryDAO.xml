@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="com.metarnet.hc.db.QueryDAO">
+
+	<resultMap id="alarmmodel" type="com.metarnet.hc.model.AlarmModel">
+		<result property="alarmnumber" column="alarmnumber" />
+		<result property="alarmid" column="alarmid" />
+		<result property="alarmcause" column="alarmcause" />
+		<result property="alarmlevel" column="alarmlevel" />
+		<result property="alarmdesc" column="alarmdesc" />
+		<result property="alarmnetime" column="starttime" />
+		<result property="alarmemstime" column="endtime" />
+		<result property="blob" column="remark" />
+		<result property="status" column="status" />
+		<result property="ackperson" column="ackperson" />
+		<result property="acktime" column="acktime" />
+		<result property="flashtimes" column="flashtimes" />
+		<result property="root_status" column="root_status" />
+		<result property="resource_state" column="resource_state" />
+		<result property="restype" column="restype" />
+		<association property="snunit" javaType="com.metarnet.hc.model.SnUnit">
+			<result property="sysno" column="sysno" />
+			<result property="neno" column="neno" />
+			<result property="shelfno" column="shelfno" />
+			<result property="subshelfno" column="subshelfno" />
+			<result property="slotno" column="slotno" />
+			<result property="subslotno" column="subslotno" />
+			<result property="cardno" column="cardno" />
+			<result property="portno" column="portno" />
+			<result property="timeslot" column="timeslot" />
+		</association>
+	</resultMap>
+   
+    <select id="getCurrentAlarmsBySys" parameterType="String" resultMap="alarmmodel" >    
+    	select 
+    	alarmnumber,alarmid,
+    	alarmcause,alarmlevel,alarmdesc,
+    	to_char(starttime, 'yyyy-mm-dd hh24:mi:ss') starttime,to_char(endtime, 'yyyy-mm-dd hh24:mi:ss') endtime,
+    	remark,'update' status,
+    	sysno,neno,shelfno,subshelfno,slotno,subslotno,cardno,portno,timeslot
+    	from t_new_alarm where sysno=#{domain}
+    </select>
+    
+    <select id="queryClearAlarms" resultMap="alarmmodel" >    
+    	select 
+    	alarmnumber,alarmid,
+    	alarmcause,alarmlevel,alarmdesc,
+    	to_char(starttime, 'yyyy-mm-dd hh24:mi:ss') starttime,to_char(endtime, 'yyyy-mm-dd hh24:mi:ss') endtime,
+    	remark,'delete' status,
+    	sysno,neno,shelfno,subshelfno,slotno,subslotno,cardno,portno,timeslot,
+    	ackperson, acktime, flashtimes, root_status, resource_state, restype
+    	from t_new_alarm where ISACK='1' and ISCLEAR='1'
+    </select>
+    
+    <select id="getFlickAlarms" parameterType="java.util.HashMap" resultMap="alarmmodel" >    
+    	select 
+    	alarmid,to_char(starttime, 'yyyy-mm-dd hh24:mi:ss') starttime,flashtimes
+    	from t_new_alarmcache 
+    	where alarmid=#{alarmid} and starttime &gt; to_date(#{flicktime}, 'yyyy-mm-dd hh24:mi:ss')
+    	order by starttime desc
+    </select>
+    
+</mapper>

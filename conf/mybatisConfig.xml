@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<environments default="default">
+	<environment id="default">
+		<transactionManager type="JDBC" />
+		<dataSource type="POOLED">
+			<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+			<property name="url" value="jdbc:oracle:thin:@192.168.90.205:1521:SGTMS"/>
+			<property name="username" value="mw_app"/>
+			<property name="password" value="app"/>
+		</dataSource>
+	</environment>
+</environments>
+<mappers>
+	<mapper resource="mapper/QueryDAO.xml"/>
+	<mapper resource="mapper/AlarmDAO.xml"/>
+</mappers>
+</configuration>

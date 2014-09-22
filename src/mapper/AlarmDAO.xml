@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="com.metarnet.hc.db.AlarmDAO">
+
+	<insert id="insertAlarm" parameterType="java.util.HashMap">
+		insert into t_new_alarm
+		(ALARMNUMBER,
+		ALARMID,
+		ALARMCAUSE,
+		ALARMDESC,
+		ALARMLEVEL,
+		STARTTIME,
+		SYSNO,
+		NENO,
+		SHELFNO,
+		SUBSHELFNO,
+		SLOTNO,
+		SUBSLOTNO,
+		CARDNO,
+		PORTNO,
+		TIMESLOT,
+		FLASHTIMES,
+		REMARK,
+		RESTYPE)
+		values
+		(#{alarmnumber},
+		#{alarmid},
+		#{alarmcause},
+		#{alarmdesc},
+		#{alarmlevel},
+		to_date(#{alarmnetime}, 'yyyy-mm-dd hh24:mi:ss'),
+		#{sysno},
+		#{neno},
+		#{shelfno},
+		#{subshelfno},
+		#{slotno},
+		#{subslotno},
+		#{cardno},
+		#{portno},
+		#{timeslot},
+		#{flashtimes},
+		#{blob},
+		#{restype})
+	</insert>
+	
+	<insert id="insertAlarmCache" parameterType="java.util.HashMap">
+		insert into t_new_alarmcache
+		(ALARMNUMBER,
+		ALARMID,
+		ALARMCAUSE,
+		ALARMDESC,
+		ALARMLEVEL,
+		STARTTIME,
+		SYSNO,
+		NENO,
+		SHELFNO,
+		SUBSHELFNO,
+		SLOTNO,
+		SUBSLOTNO,
+		CARDNO,
+		PORTNO,
+		TIMESLOT,
+		FLASHTIMES,
+		REMARK,
+		RESTYPE)
+		values
+		(#{alarmnumber},
+		#{alarmid},
+		#{alarmcause},
+		#{alarmdesc},
+		#{alarmlevel},
+		to_date(#{alarmnetime}, 'yyyy-mm-dd hh24:mi:ss'),
+		#{sysno},
+		#{neno},
+		#{shelfno},
+		#{subshelfno},
+		#{slotno},
+		#{subslotno},
+		#{cardno},
+		#{portno},
+		#{timeslot},
+		#{flashtimes},
+		#{blob},
+		#{restype})
+	</insert>
+	
+	<insert id="insertHisAlarm" parameterType="java.util.HashMap">
+		insert into t_new_hisalarm
+		(ALARMNUMBER,
+		ALARMID,
+		ALARMCAUSE,
+		ALARMDESC,
+		ALARMLEVEL,
+		STARTTIME,
+		ENDTIME,
+		SYSNO,
+		NENO,
+		SHELFNO,
+		SUBSHELFNO,
+		SLOTNO,
+		SUBSLOTNO,
+		CARDNO,
+		PORTNO,
+		TIMESLOT,
+		ACKPERSON,
+		ACKTIME,
+		FLASHTIMES,
+		REMARK,
+		ROOT_STATUS,
+		RESOURCE_STATE,
+		ISACK,
+		ISCLEAR,
+		RESTYPE)
+		values
+		(#{alarmnumber},
+		#{alarmid},
+		#{alarmcause},
+		#{alarmdesc},
+		#{alarmlevel},
+		to_date(#{alarmnetime}, 'yyyy-mm-dd hh24:mi:ss'),
+		to_date(#{alarmemstime}, 'yyyy-mm-dd hh24:mi:ss'),
+		#{sysno},
+		#{neno},
+		#{shelfno},
+		#{subshelfno},
+		#{slotno},
+		#{subslotno},
+		#{cardno},
+		#{portno},
+		#{timeslot},
+		#{ackperson},
+		to_date(#{acktime}, 'yyyy-mm-dd hh24:mi:ss'),
+		#{flashtimes},
+		#{blob},
+		#{root_status},
+		#{resource_state},
+		'1',
+		'1',
+		#{restype})
+	</insert>
+	
+	<update id="updateAlarm" parameterType="java.util.HashMap">
+		update t_new_alarm set
+		STARTTIME = to_date(#{alarmnetime}, 'yyyy-mm-dd hh24:mi:ss')
+		where ALARMID = #{alarmid}
+	</update>
+	
+	<update id="updateClearAlarm" parameterType="java.util.HashMap">
+		update t_new_alarm set
+		ISCLEAR = '1', ENDTIME = to_date(#{alarmnetime}, 'yyyy-mm-dd hh24:mi:ss')
+		where ALARMID = #{alarmid}
+	</update>
+	
+	<delete id="deleteAlarm" parameterType="java.util.HashMap">
+		delete from t_new_alarm where ALARMID = #{alarmid}
+	</delete>
+	
+	<delete id="deleteAlarmCacheByTime" parameterType="java.util.HashMap">
+		delete from t_new_alarmcache where STARTTIME &lt; to_date(#{starttime}, 'yyyy-mm-dd hh24:mi:ss')
+	</delete>
+    
+</mapper>
